@@ -15,8 +15,7 @@ class MeanRegressor(RegressorMixin):
 
 
 data = pd.read_csv("C:/Users/Артем/Datasets/organisations.csv")
-df = data[(data['average_bill'].notna()) & (data['average_bill'] <= 2500)]
-clean_data = df
+clean_data = data[(data['average_bill'].notna()) & (data['average_bill'] <= 2500)]
 clean_data_train, clean_data_test = train_test_split(
     clean_data, stratify=clean_data['average_bill'],
     test_size=0.33, random_state=42)
