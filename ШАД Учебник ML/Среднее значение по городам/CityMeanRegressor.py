@@ -21,3 +21,10 @@ class CityMeanRegressor(RegressorMixin):
                 self.array.append(self.spb_mean)
 
         return self.array
+
+
+reg = CityMeanRegressor()
+reg.fit(y=clean_data_train)
+city_mean_rmse = np.sqrt(mean_squared_error(clean_data_test["average_bill"], reg.predict(clean_data_test)))
+s = pd.Series(np.hstack([base_rmse, city_mean_rmse]), index=["BaseLine RMSE", "CityMeanRegressor RMSE"])
+print(s)
