@@ -27,14 +27,13 @@ class SGDLinearRegressor(RegressorMixin):
                 self.X_batch = self.data.T[:-1].T[self.i - self.batch_size : self.i]
                 self.y_batch = self.data.T[-1][self.i - self.batch_size : self.i]
                 self.f = np.dot(self.X_batch, self.W) + self.b
-                self.err = self.f - self.y_batch
-                self.grad_w = (2 * self.lr * np.dot(self.X_batch.T, self.err) / self.batch_size)
-                + 2 * self.lr * self.regularization * self.W
-                self.grad_b = 2 * self.lr * np.sum(self.err) / self.batch_size
-                if np.linalg.norm((self.W - self.grad_w) - self.W) < self.delta_converged:
+                self.err = self.y_batch - self.f
+                self.grad_w = (2 * np.dot(self.X_batch.T, self.err) / self.batch_size) + self.regularization * self.W
+                self.grad_b = 2 * np.sum(self.err) / self.batch_size
+                if np.linalg.norm(self.W - (self.W - self.lr * self.grad_w)) < self.delta_converged:
                     return self
-                self.W -= self.grad_w
-                self.b -= self.grad_b
+                self.W -= self.lr * self.grad_w
+                self.b -= self.lr * self.grad_b
                 self.i += self.batch_size
             self.steps += 1
         return self
